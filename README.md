@@ -13,39 +13,46 @@ A Node.js/Express backend server for the e-commerce application with MongoDB int
 ## Setup
 
 ### Prerequisites
+
 - Node.js and npm installed
 - MongoDB Atlas account or local MongoDB instance
 
 ### Installation
 
 1. Clone the repository
+
 ```bash
 git clone https://github.com/simranjit02/afternoon-backend.git
 cd e-commerce-backend
 ```
 
 2. Install dependencies
+
 ```bash
 npm install
 ```
 
 3. Create `.env` file from `.env.example`
+
 ```bash
 cp .env.example .env
 ```
 
 4. Update `.env` with your MongoDB connection string
+
 ```
 MONGODB_URI=mongodb+srv://username:password@cluster-name.mongodb.net/furnitureClg?retryWrites=true&w=majority
 PORT=5000
 ```
 
 5. Seed the database
+
 ```bash
 npm run seed
 ```
 
 6. Start the server
+
 ```bash
 npm run dev
 ```
