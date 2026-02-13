@@ -1,92 +1,80 @@
-# E-Commerce Backend API
+# E‑commerce Backend
 
-A Node.js/Express backend server for the e-commerce application with MongoDB integration.
+Node.js + Express API for the Afternoon e‑commerce app. Handles auth, products, cart, users (admin), and contact inquiries.
 
-## Features
+## Prerequisites
 
-- RESTful API for product management
-- MongoDB database integration
-- CRUD operations for products
-- Filter by category
-- Seed script for database initialization
+- **Node.js** v18+ (or v16+)
+- **MongoDB** (local or [MongoDB Atlas](https://www.mongodb.com/cloud/atlas))
 
 ## Setup
 
-### Prerequisites
-
-- Node.js and npm installed
-- MongoDB Atlas account or local MongoDB instance
-
-### Installation
-
-1. Clone the repository
-
-```bash
-git clone https://github.com/simranjit02/afternoon-backend.git
-cd e-commerce-backend
-```
-
-2. Install dependencies
+### 1. Install dependencies
 
 ```bash
 npm install
 ```
 
-3. Create `.env` file from `.env.example`
+### 2. Environment variables
+
+Create a `.env` file in this folder (same level as `package.json`). Do not commit real secrets to Git.
+
+Example:
+
+```env
+MONGODB_URI=mongodb://localhost:27017/yourdb
+# Or MongoDB Atlas: mongodb+srv://user:password@cluster.mongodb.net/dbname
+
+PORT=5001
+NODE_ENV=development
+JWT_SECRET=your_secure_random_secret_here
+```
+
+| Variable | Required | Description |
+|---------|----------|-------------|
+| `MONGODB_URI` | Yes | MongoDB connection string |
+| `PORT` | No | Server port (default: 5000) |
+| `JWT_SECRET` | Yes | Secret for signing JWT tokens |
+| `NODE_ENV` | No | e.g. `development` or `production` |
+
+### 3. (Optional) Create an admin user
+
+After you have at least one user (sign up via the store or add via admin Users page), you can set their role to admin:
 
 ```bash
-cp .env.example .env
+npm run set-admin -- user@example.com
 ```
 
-4. Update `.env` with your MongoDB connection string
+Or set `role: "admin"` for that user in MongoDB.
 
-```
-MONGODB_URI=mongodb+srv://username:password@cluster-name.mongodb.net/furnitureClg?retryWrites=true&w=majority
-PORT=5000
-```
+## Scripts
 
-5. Seed the database
+| Command | Description |
+|---------|-------------|
+| `npm start` | Run the server (`node server.js`) |
+| `npm run dev` | Run with nodemon (auto-restart on file changes) |
+| `npm run seed` | Seed database (if you have a seed script) |
+| `npm run set-admin -- <email>` | Set a user as admin by email |
+
+## Running the server
 
 ```bash
-npm run seed
+npm start
 ```
 
-6. Start the server
+Server runs at **http://localhost:5001** (or the `PORT` in `.env`).
 
-```bash
-npm run dev
-```
+## API base
 
-## API Endpoints
+- Base URL: `http://localhost:5001/api`
+- The store and admin frontends use this URL (configurable via their env: `REACT_APP_API_URL` and `VITE_API_URL`).
 
-### Products
+## Main routes
 
-- **GET** `/api/products` - Get all products
-- **GET** `/api/products/:id` - Get product by ID
-- **GET** `/api/products/category/:category` - Get products by category
-- **POST** `/api/products` - Create new product
-- **PUT** `/api/products/:id` - Update product
-- **DELETE** `/api/products/:id` - Delete product
+- `GET/POST /api/auth/*` – login, register, me
+- `GET/POST/PUT/DELETE /api/products` – products (GET public; create/update/delete admin)
+- `GET/POST/PUT/DELETE /api/cart` – user cart (authenticated)
+- `GET/POST/PATCH /api/users`, `GET/PATCH/DELETE /api/users/:id` – admin user management
+- `POST /api/inquiries` – contact form (public); `GET/PATCH /api/inquiries` – admin list/update
 
-## Example Usage
-
-```bash
-# Get all products
-curl http://localhost:5000/api/products
-
-# Get products by category
-curl http://localhost:5000/api/products/category/Furniture
-
-# Create product
-curl -X POST http://localhost:5000/api/products \
-  -H "Content-Type: application/json" \
-  -d '{
-    "productName": "Sofa",
-    "productPrice": "85.00",
-    "productCategory": "Furniture"
-  }'
-```
-
-## License
-
-ISC
+Ensure the backend is running before using the store or admin dashboard.
